@@ -14,7 +14,189 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      articles: {
+        Row: {
+          category: string
+          excerpt: string
+          id: string
+          image_url: string | null
+          published_at: string
+          read_minutes: number
+          title: string
+          url: string | null
+        }
+        Insert: {
+          category?: string
+          excerpt?: string
+          id?: string
+          image_url?: string | null
+          published_at?: string
+          read_minutes?: number
+          title: string
+          url?: string | null
+        }
+        Update: {
+          category?: string
+          excerpt?: string
+          id?: string
+          image_url?: string | null
+          published_at?: string
+          read_minutes?: number
+          title?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      companies: {
+        Row: {
+          accent: string
+          created_at: string
+          description: string
+          id: string
+          logo_url: string | null
+          name: string
+          tags: string[]
+        }
+        Insert: {
+          accent?: string
+          created_at?: string
+          description?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          tags?: string[]
+        }
+        Update: {
+          accent?: string
+          created_at?: string
+          description?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          tags?: string[]
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          apply_url: string | null
+          category: string
+          company: string
+          created_at: string
+          featured: boolean
+          id: string
+          industry: string | null
+          job_type: string
+          location: string
+          logo_url: string | null
+          salary: string | null
+          title: string
+        }
+        Insert: {
+          apply_url?: string | null
+          category?: string
+          company: string
+          created_at?: string
+          featured?: boolean
+          id?: string
+          industry?: string | null
+          job_type?: string
+          location?: string
+          logo_url?: string | null
+          salary?: string | null
+          title: string
+        }
+        Update: {
+          apply_url?: string | null
+          category?: string
+          company?: string
+          created_at?: string
+          featured?: boolean
+          id?: string
+          industry?: string | null
+          job_type?: string
+          location?: string
+          logo_url?: string | null
+          salary?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      scholarships: {
+        Row: {
+          amount: string | null
+          apply_url: string | null
+          country: string
+          created_at: string
+          deadline: string | null
+          description: string
+          id: string
+          level: string
+          organization: string
+          tags: string[]
+          title: string
+        }
+        Insert: {
+          amount?: string | null
+          apply_url?: string | null
+          country?: string
+          created_at?: string
+          deadline?: string | null
+          description?: string
+          id?: string
+          level?: string
+          organization: string
+          tags?: string[]
+          title: string
+        }
+        Update: {
+          amount?: string | null
+          apply_url?: string | null
+          country?: string
+          created_at?: string
+          deadline?: string | null
+          description?: string
+          id?: string
+          level?: string
+          organization?: string
+          tags?: string[]
+          title?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          avatar_url: string | null
+          company: string
+          created_at: string
+          id: string
+          name: string
+          quote: string
+          rating: number
+          role: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          company?: string
+          created_at?: string
+          id?: string
+          name: string
+          quote: string
+          rating?: number
+          role?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          company?: string
+          created_at?: string
+          id?: string
+          name?: string
+          quote?: string
+          rating?: number
+          role?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
