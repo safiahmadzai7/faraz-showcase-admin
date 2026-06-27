@@ -15,6 +15,8 @@ import { Route as CompaniesRouteImport } from './routes/companies'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ScholarshipsIdRouteImport } from './routes/scholarships.$id'
+import { Route as JobsIdRouteImport } from './routes/jobs.$id'
 
 const ScholarshipsRoute = ScholarshipsRouteImport.update({
   id: '/scholarships',
@@ -46,22 +48,36 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScholarshipsIdRoute = ScholarshipsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ScholarshipsRoute,
+} as any)
+const JobsIdRoute = JobsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => JobsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
   '/companies': typeof CompaniesRoute
-  '/jobs': typeof JobsRoute
-  '/scholarships': typeof ScholarshipsRoute
+  '/jobs': typeof JobsRouteWithChildren
+  '/scholarships': typeof ScholarshipsRouteWithChildren
+  '/jobs/$id': typeof JobsIdRoute
+  '/scholarships/$id': typeof ScholarshipsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
   '/companies': typeof CompaniesRoute
-  '/jobs': typeof JobsRoute
-  '/scholarships': typeof ScholarshipsRoute
+  '/jobs': typeof JobsRouteWithChildren
+  '/scholarships': typeof ScholarshipsRouteWithChildren
+  '/jobs/$id': typeof JobsIdRoute
+  '/scholarships/$id': typeof ScholarshipsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,14 +85,32 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
   '/companies': typeof CompaniesRoute
-  '/jobs': typeof JobsRoute
-  '/scholarships': typeof ScholarshipsRoute
+  '/jobs': typeof JobsRouteWithChildren
+  '/scholarships': typeof ScholarshipsRouteWithChildren
+  '/jobs/$id': typeof JobsIdRoute
+  '/scholarships/$id': typeof ScholarshipsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/blog' | '/companies' | '/jobs' | '/scholarships'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/blog'
+    | '/companies'
+    | '/jobs'
+    | '/scholarships'
+    | '/jobs/$id'
+    | '/scholarships/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/blog' | '/companies' | '/jobs' | '/scholarships'
+  to:
+    | '/'
+    | '/admin'
+    | '/blog'
+    | '/companies'
+    | '/jobs'
+    | '/scholarships'
+    | '/jobs/$id'
+    | '/scholarships/$id'
   id:
     | '__root__'
     | '/'
@@ -85,6 +119,8 @@ export interface FileRouteTypes {
     | '/companies'
     | '/jobs'
     | '/scholarships'
+    | '/jobs/$id'
+    | '/scholarships/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,8 +128,8 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   BlogRoute: typeof BlogRoute
   CompaniesRoute: typeof CompaniesRoute
-  JobsRoute: typeof JobsRoute
-  ScholarshipsRoute: typeof ScholarshipsRoute
+  JobsRoute: typeof JobsRouteWithChildren
+  ScholarshipsRoute: typeof ScholarshipsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -140,16 +176,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/scholarships/$id': {
+      id: '/scholarships/$id'
+      path: '/$id'
+      fullPath: '/scholarships/$id'
+      preLoaderRoute: typeof ScholarshipsIdRouteImport
+      parentRoute: typeof ScholarshipsRoute
+    }
+    '/jobs/$id': {
+      id: '/jobs/$id'
+      path: '/$id'
+      fullPath: '/jobs/$id'
+      preLoaderRoute: typeof JobsIdRouteImport
+      parentRoute: typeof JobsRoute
+    }
   }
 }
+
+interface JobsRouteChildren {
+  JobsIdRoute: typeof JobsIdRoute
+}
+
+const JobsRouteChildren: JobsRouteChildren = {
+  JobsIdRoute: JobsIdRoute,
+}
+
+const JobsRouteWithChildren = JobsRoute._addFileChildren(JobsRouteChildren)
+
+interface ScholarshipsRouteChildren {
+  ScholarshipsIdRoute: typeof ScholarshipsIdRoute
+}
+
+const ScholarshipsRouteChildren: ScholarshipsRouteChildren = {
+  ScholarshipsIdRoute: ScholarshipsIdRoute,
+}
+
+const ScholarshipsRouteWithChildren = ScholarshipsRoute._addFileChildren(
+  ScholarshipsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   BlogRoute: BlogRoute,
   CompaniesRoute: CompaniesRoute,
-  JobsRoute: JobsRoute,
-  ScholarshipsRoute: ScholarshipsRoute,
+  JobsRoute: JobsRouteWithChildren,
+  ScholarshipsRoute: ScholarshipsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

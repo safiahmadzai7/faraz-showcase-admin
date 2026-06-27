@@ -1,9 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { fetchJobs } from "@/lib/content";
-import { Bookmark, Briefcase, Clock, MapPin, Search, Star, X } from "lucide-react";
+import { Briefcase, Clock, MapPin, Search, Star, X } from "lucide-react";
+
 
 type JobsSearch = { q?: string; loc?: string };
 
