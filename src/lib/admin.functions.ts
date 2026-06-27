@@ -59,11 +59,11 @@ export const adminUpsert = createServerFn({ method: "POST" })
     await requireAdmin();
     if (!TABLES.includes(data.table)) throw new Error("Invalid table");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: result, error } = await supabaseAdmin
-      .from(data.table)
-      .upsert(data.row as never)
-      .select()
-      .single();
+    const { id, ...rest } = data.row as { id?: string } & Record<string, unknown>;
+    const query = id
+      ? supabaseAdmin.from(data.table).update(rest as never).eq("id", id).select().single()
+      : supabaseAdmin.from(data.table).insert(rest as never).select().single();
+    const { data: result, error } = await query;
     if (error) throw new Error(error.message);
     return result;
   });
