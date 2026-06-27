@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   Search, MapPin, Briefcase, Bookmark, GraduationCap,
   Calendar, ArrowRight, Star, Clock, TrendingUp,
@@ -85,22 +86,8 @@ function Hero() {
               Search and find your dream job, scholarship or top company — all in one place, curated for you.
             </p>
 
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="mx-auto mt-8 grid w-full max-w-2xl gap-2 rounded-2xl bg-white p-2 shadow-card sm:grid-cols-[1fr_1fr_auto] sm:rounded-full"
-            >
-              <label className="flex items-center gap-2 rounded-full px-4 py-2.5">
-                <Search className="h-4 w-4 text-muted-foreground" />
-                <input className="w-full bg-transparent text-sm outline-none" placeholder="Job title, keyword or company" />
-              </label>
-              <label className="flex items-center gap-2 rounded-full border-t px-4 py-2.5 sm:border-l sm:border-t-0">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                <input className="w-full bg-transparent text-sm outline-none" placeholder="City, state, zip or remote" />
-              </label>
-              <button className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground">
-                Search
-              </button>
-            </form>
+            <HeroSearch />
+
           </motion.div>
         </div>
       </div>
