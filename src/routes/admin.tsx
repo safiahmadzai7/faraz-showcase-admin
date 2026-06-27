@@ -1,16 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
-  adminLogin, adminLogout, adminStatus, adminUpsert, adminDelete,
+  adminLogin, adminLogout, adminStatus, adminUpsert, adminDelete, adminUploadImage,
 } from "@/lib/admin.functions";
 import {
   fetchJobs, fetchCompanies, fetchScholarships, fetchArticles, fetchTestimonials,
 } from "@/lib/content";
-import { Link } from "@tanstack/react-router";
-import { LogOut, Plus, Trash2, Pencil, ArrowLeft } from "lucide-react";
+import { LogOut, Plus, Trash2, Pencil, ArrowLeft, Upload, ImageIcon, X } from "lucide-react";
 import { BrandMark } from "@/components/site-chrome";
 
 export const Route = createFileRoute("/admin")({
@@ -20,36 +19,39 @@ export const Route = createFileRoute("/admin")({
 });
 
 /* ---------- Field definitions per table ---------- */
-type FieldDef = { key: string; label: string; type?: "text" | "textarea" | "number" | "date" | "checkbox" | "tags" };
+type FieldType = "text" | "textarea" | "number" | "date" | "checkbox" | "tags" | "image" | "url";
+type FieldDef = { key: string; label: string; type?: FieldType; required?: boolean; placeholder?: string };
 type TableKey = "jobs" | "companies" | "scholarships" | "articles" | "testimonials";
 
-const SCHEMAS: Record<TableKey, { label: string; fetch: () => Promise<any[]>; fields: FieldDef[]; primary: string; secondary?: string }> = {
+const SCHEMAS: Record<TableKey, { label: string; fetch: () => Promise<any[]>; fields: FieldDef[]; primary: string; secondary?: string; thumb?: string }> = {
   jobs: {
     label: "Jobs",
     fetch: fetchJobs,
     primary: "title",
     secondary: "company",
+    thumb: "logo_url",
     fields: [
-      { key: "title", label: "Job Title" },
-      { key: "company", label: "Company" },
-      { key: "logo_url", label: "Company Logo URL" },
-      { key: "location", label: "Location" },
-      { key: "job_type", label: "Job Type (Full-time, Part-time…)" },
-      { key: "category", label: "Category (UI/UX, Sales…)" },
-      { key: "industry", label: "Industry" },
-      { key: "salary", label: "Salary (e.g. $400/monthly)" },
-      { key: "apply_url", label: "Apply URL" },
-      { key: "featured", label: "Featured", type: "checkbox" },
+      { key: "title", label: "Job Title", required: true, placeholder: "Senior Product Designer" },
+      { key: "company", label: "Company", required: true, placeholder: "Spotify" },
+      { key: "logo_url", label: "Company Logo / Photo", type: "image" },
+      { key: "location", label: "Location", required: true, placeholder: "Remote · Lahore, PK" },
+      { key: "job_type", label: "Job Type", required: true, placeholder: "Full-time, Part-time, Contract" },
+      { key: "category", label: "Category", required: true, placeholder: "UI/UX, Sales, Engineering" },
+      { key: "industry", label: "Industry", placeholder: "Technology" },
+      { key: "salary", label: "Salary", placeholder: "$400/monthly" },
+      { key: "apply_url", label: "Apply URL", type: "url", required: true, placeholder: "https://…" },
+      { key: "featured", label: "Featured on homepage", type: "checkbox" },
     ],
   },
   companies: {
     label: "Top Companies",
     fetch: fetchCompanies,
     primary: "name",
+    thumb: "logo_url",
     fields: [
-      { key: "name", label: "Company Name" },
-      { key: "logo_url", label: "Logo URL" },
-      { key: "description", label: "Description", type: "textarea" },
+      { key: "name", label: "Company Name", required: true },
+      { key: "logo_url", label: "Logo / Cover Photo", type: "image" },
+      { key: "description", label: "Description", type: "textarea", required: true },
       { key: "tags", label: "Tags (comma separated)", type: "tags" },
     ],
   },
@@ -59,15 +61,16 @@ const SCHEMAS: Record<TableKey, { label: string; fetch: () => Promise<any[]>; fi
     primary: "title",
     secondary: "organization",
     fields: [
-      { key: "title", label: "Scholarship Title" },
-      { key: "organization", label: "Organization" },
-      { key: "country", label: "Country" },
-      { key: "amount", label: "Amount / Value" },
-      { key: "level", label: "Level (Undergraduate, Masters…)" },
+      { key: "title", label: "Scholarship Title", required: true },
+      { key: "organization", label: "Organization", required: true, placeholder: "Chevening / UK Government" },
+      { key: "logo_url" as any, label: "Photo / Cover", type: "image" },
+      { key: "country", label: "Country", required: true, placeholder: "United Kingdom" },
+      { key: "amount", label: "Amount / Value", placeholder: "Fully funded" },
+      { key: "level", label: "Level", required: true, placeholder: "Undergraduate, Masters, PhD" },
       { key: "deadline", label: "Deadline", type: "date" },
-      { key: "description", label: "Description", type: "textarea" },
+      { key: "description", label: "Description", type: "textarea", required: true },
       { key: "tags", label: "Tags (comma separated)", type: "tags" },
-      { key: "apply_url", label: "Apply URL" },
+      { key: "apply_url", label: "Apply URL", type: "url", required: true },
     ],
   },
   articles: {
@@ -75,13 +78,14 @@ const SCHEMAS: Record<TableKey, { label: string; fetch: () => Promise<any[]>; fi
     fetch: fetchArticles,
     primary: "title",
     secondary: "category",
+    thumb: "image_url",
     fields: [
-      { key: "title", label: "Title" },
-      { key: "excerpt", label: "Excerpt", type: "textarea" },
-      { key: "image_url", label: "Image URL" },
-      { key: "category", label: "Category (News, Interview…)" },
+      { key: "title", label: "Title", required: true },
+      { key: "excerpt", label: "Excerpt", type: "textarea", required: true },
+      { key: "image_url", label: "Cover Image", type: "image" },
+      { key: "category", label: "Category", required: true, placeholder: "News, Interview, Guide" },
       { key: "read_minutes", label: "Read minutes", type: "number" },
-      { key: "url", label: "Article URL" },
+      { key: "url", label: "Article URL", type: "url" },
     ],
   },
   testimonials: {
@@ -89,12 +93,13 @@ const SCHEMAS: Record<TableKey, { label: string; fetch: () => Promise<any[]>; fi
     fetch: fetchTestimonials,
     primary: "name",
     secondary: "company",
+    thumb: "avatar_url",
     fields: [
-      { key: "name", label: "Person Name" },
-      { key: "role", label: "Role / Title" },
-      { key: "company", label: "Company" },
-      { key: "avatar_url", label: "Avatar URL" },
-      { key: "quote", label: "Quote", type: "textarea" },
+      { key: "name", label: "Person Name", required: true },
+      { key: "role", label: "Role / Title", required: true },
+      { key: "company", label: "Company", required: true },
+      { key: "avatar_url", label: "Photo", type: "image" },
+      { key: "quote", label: "Quote", type: "textarea", required: true },
       { key: "rating", label: "Rating (1-5)", type: "number" },
     ],
   },
@@ -187,7 +192,7 @@ function Dashboard({ onLock }: { onLock: () => void }) {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <h1 className="font-display text-3xl font-extrabold">Content Manager</h1>
-        <p className="mt-1 text-muted-foreground">Add, edit and delete content shown on the site.</p>
+        <p className="mt-1 text-muted-foreground">Add, edit, upload photos and delete content shown on the site.</p>
 
         <div className="mt-6 flex flex-wrap gap-2">
           {ORDER.map((k) => (
@@ -225,9 +230,20 @@ function ResourceManager({ table }: { table: TableKey }) {
   }, [schema]);
 
   async function save(row: Record<string, any>) {
-    // strip empty strings for nullable fields
+    // Validate required
+    for (const f of schema.fields) {
+      if (f.required) {
+        const v = row[f.key];
+        if (v === undefined || v === null || v === "" || (Array.isArray(v) && v.length === 0)) {
+          toast.error(`${f.label} is required`);
+          return;
+        }
+      }
+    }
     const cleaned: Record<string, any> = {};
     Object.entries(row).forEach(([k, v]) => {
+      // Skip image_url-style key when table doesn't have it (scholarships)
+      if (table === "scholarships" && k === "logo_url") return;
       if (v === "" || v === null || (Array.isArray(v) && v.length === 0)) return;
       cleaned[k] = v;
     });
@@ -249,8 +265,14 @@ function ResourceManager({ table }: { table: TableKey }) {
     } catch (e: any) { toast.error(e.message ?? "Delete failed"); }
   }
 
+  // Filter fields - hide logo_url for scholarships since table doesn't have that column
+  const visibleFields = useMemo(() => {
+    if (table === "scholarships") return schema.fields.filter((f) => f.key !== "logo_url");
+    return schema.fields;
+  }, [table, schema]);
+
   return (
-    <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_400px]">
+    <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_440px]">
       <div className="rounded-3xl border bg-card p-6 shadow-card">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-display text-xl font-bold">{schema.label}</h2>
@@ -268,11 +290,22 @@ function ResourceManager({ table }: { table: TableKey }) {
           <ul className="divide-y">
             {data.map((row) => (
               <li key={row.id} className="flex items-center justify-between gap-3 py-3">
-                <div className="min-w-0">
-                  <div className="truncate font-semibold">{row[schema.primary]}</div>
-                  {schema.secondary && (
-                    <div className="truncate text-xs text-muted-foreground">{row[schema.secondary]}</div>
+                <div className="flex min-w-0 items-center gap-3">
+                  {schema.thumb && (
+                    row[schema.thumb] ? (
+                      <img src={row[schema.thumb]} alt="" className="h-10 w-10 rounded-xl object-cover" />
+                    ) : (
+                      <div className="grid h-10 w-10 place-items-center rounded-xl bg-secondary text-muted-foreground">
+                        <ImageIcon className="h-4 w-4" />
+                      </div>
+                    )
                   )}
+                  <div className="min-w-0">
+                    <div className="truncate font-semibold">{row[schema.primary]}</div>
+                    {schema.secondary && (
+                      <div className="truncate text-xs text-muted-foreground">{row[schema.secondary]}</div>
+                    )}
+                  </div>
                 </div>
                 <div className="flex shrink-0 gap-2">
                   <button onClick={() => setEditing({ ...empty, ...row })} className="rounded-full border p-2"><Pencil className="h-4 w-4" /></button>
@@ -284,12 +317,12 @@ function ResourceManager({ table }: { table: TableKey }) {
         )}
       </div>
 
-      <div className="rounded-3xl border bg-card p-6 shadow-card">
+      <div className="rounded-3xl border bg-card p-6 shadow-card lg:sticky lg:top-24 lg:self-start">
         <h3 className="font-display text-lg font-bold">{editing?.id ? "Edit" : "New"} {schema.label.replace(/s$/, "")}</h3>
         {!editing ? (
           <p className="mt-3 text-sm text-muted-foreground">Pick an item to edit, or click New to add one.</p>
         ) : (
-          <Form fields={schema.fields} value={editing} onChange={setEditing} onSubmit={save} onCancel={() => setEditing(null)} />
+          <Form fields={visibleFields} value={editing} onChange={setEditing} onSubmit={save} onCancel={() => setEditing(null)} />
         )}
       </div>
     </div>
@@ -308,7 +341,7 @@ function Form({
   return (
     <form
       onSubmit={(e) => { e.preventDefault(); onSubmit(value); }}
-      className="mt-4 space-y-3"
+      className="mt-4 space-y-3 max-h-[70vh] overflow-y-auto pr-1"
     >
       {fields.map((f) => (
         <Field key={f.key} f={f} v={value[f.key]} onChange={(nv) => onChange({ ...value, [f.key]: nv })} />
@@ -323,11 +356,25 @@ function Form({
 
 function Field({ f, v, onChange }: { f: FieldDef; v: any; onChange: (v: any) => void }) {
   const base = "w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-accent";
+  const labelEl = (
+    <span className="mb-1 block font-medium">
+      {f.label}{f.required && <span className="ml-1 text-destructive">*</span>}
+    </span>
+  );
+
+  if (f.type === "image") {
+    return (
+      <div className="block text-sm">
+        {labelEl}
+        <ImageField value={v} onChange={onChange} />
+      </div>
+    );
+  }
   if (f.type === "textarea") {
     return (
       <label className="block text-sm">
-        <span className="mb-1 block font-medium">{f.label}</span>
-        <textarea rows={4} className={base} value={v ?? ""} onChange={(e) => onChange(e.target.value)} />
+        {labelEl}
+        <textarea rows={4} required={f.required} placeholder={f.placeholder} className={base} value={v ?? ""} onChange={(e) => onChange(e.target.value)} />
       </label>
     );
   }
@@ -343,7 +390,7 @@ function Field({ f, v, onChange }: { f: FieldDef; v: any; onChange: (v: any) => 
     const text = Array.isArray(v) ? v.join(", ") : "";
     return (
       <label className="block text-sm">
-        <span className="mb-1 block font-medium">{f.label}</span>
+        {labelEl}
         <input className={base} value={text} placeholder="e.g. UI/UX, Sales, Marketing"
           onChange={(e) => onChange(e.target.value.split(",").map((s) => s.trim()).filter(Boolean))} />
       </label>
@@ -351,13 +398,86 @@ function Field({ f, v, onChange }: { f: FieldDef; v: any; onChange: (v: any) => 
   }
   return (
     <label className="block text-sm">
-      <span className="mb-1 block font-medium">{f.label}</span>
+      {labelEl}
       <input
         className={base}
-        type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
+        type={f.type === "number" ? "number" : f.type === "date" ? "date" : f.type === "url" ? "url" : "text"}
+        required={f.required}
+        placeholder={f.placeholder}
         value={v ?? ""}
         onChange={(e) => onChange(f.type === "number" ? Number(e.target.value) : e.target.value)}
       />
     </label>
+  );
+}
+
+function ImageField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const upload = useServerFn(adminUploadImage);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast.error("Image must be under 5MB"); return; }
+    setBusy(true);
+    try {
+      const buf = await file.arrayBuffer();
+      // Convert to base64
+      let binary = "";
+      const bytes = new Uint8Array(buf);
+      const CHUNK = 0x8000;
+      for (let i = 0; i < bytes.length; i += CHUNK) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK));
+      }
+      const base64 = btoa(binary);
+      const r = await upload({ data: { name: file.name, contentType: file.type || "image/png", base64 } });
+      onChange(r.url);
+      toast.success("Photo uploaded");
+    } catch (err: any) {
+      toast.error(err.message ?? "Upload failed");
+    } finally {
+      setBusy(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div className="space-y-2">
+      {value ? (
+        <div className="relative">
+          <img src={value} alt="" className="h-36 w-full rounded-xl border object-cover" />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-background/90 shadow"
+            aria-label="Remove photo"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={busy}
+          className="flex h-36 w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed bg-gradient-soft text-muted-foreground transition hover:border-accent hover:text-accent disabled:opacity-60"
+        >
+          <Upload className="h-5 w-5" />
+          <span className="text-xs font-semibold">{busy ? "Uploading…" : "Click to upload photo"}</span>
+          <span className="text-[10px]">PNG, JPG up to 5MB</span>
+        </button>
+      )}
+      <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={onPick} />
+      {value && (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="text-xs font-semibold text-accent"
+        >
+          Replace photo
+        </button>
+      )}
+    </div>
   );
 }

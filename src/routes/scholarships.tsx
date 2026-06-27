@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { fetchScholarships } from "@/lib/content";
 import { Calendar, GraduationCap, MapPin, Star } from "lucide-react";
+
 
 export const Route = createFileRoute("/scholarships")({
   head: () => ({ meta: [{ title: "Scholarships — Project Faraz" }, { name: "description", content: "Browse scholarships you can apply for." }] }),
@@ -23,12 +24,17 @@ function Page() {
         ) : (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {data.map((s) => (
-              <div key={s.id} className="rounded-3xl border bg-gradient-card p-6 shadow-card">
+              <Link
+                key={s.id}
+                to="/scholarships/$id"
+                params={{ id: s.id }}
+                className="group flex flex-col rounded-3xl border bg-gradient-card p-6 shadow-card transition hover:-translate-y-1 hover:shadow-pop"
+              >
                 <div className="flex items-center gap-3">
-                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-white text-accent"><GraduationCap className="h-5 w-5" /></div>
+                  <div className="grid h-12 w-12 place-items-center rounded-xl bg-white text-accent shadow-card"><GraduationCap className="h-6 w-6" /></div>
                   <div className="font-semibold">{s.organization}</div>
                 </div>
-                <h3 className="mt-4 font-display text-lg font-bold">{s.title}</h3>
+                <h3 className="mt-4 font-display text-lg font-bold group-hover:text-accent">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{s.description}</p>
                 <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                   <Row icon={MapPin} text={s.country || "Worldwide"} />
@@ -36,12 +42,12 @@ function Page() {
                   {s.amount && <Row icon={Star} text={s.amount} />}
                   {s.deadline && <Row icon={Calendar} text={new Date(s.deadline).toLocaleDateString()} />}
                 </div>
-                <a href={s.apply_url || "#"} target={s.apply_url ? "_blank" : undefined} rel="noreferrer"
-                  className="mt-5 block rounded-full bg-primary py-2.5 text-center text-sm font-semibold text-primary-foreground">
-                  Apply
-                </a>
-              </div>
+                <span className="mt-5 inline-flex items-center justify-center rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground">
+                  View details
+                </span>
+              </Link>
             ))}
+
           </div>
         )}
       </main>

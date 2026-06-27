@@ -78,3 +78,25 @@ export const adminDelete = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
+
+export const adminUploadImage = createServerFn({ method: "POST" })
+  .inputValidator((data: { name: string; contentType: string; base64: string }) => data)
+  .handler(async ({ data }) => {
+    await requireAdmin();
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const ext = (data.name.split(".").pop() || "png").toLowerCase().replace(/[^a-z0-9]/g, "") || "png";
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const bytes = Uint8Array.from(atob(data.base64), (c) => c.charCodeAt(0));
+    const { error } = await supabaseAdmin.storage.from("uploads").upload(path, bytes, {
+      contentType: data.contentType || "image/png",
+      upsert: false,
+    });
+    if (error) throw new Error(error.message);
+    // Bucket is private; return a long-lived signed URL (10 years).
+    const { data: signed, error: sErr } = await supabaseAdmin.storage
+      .from("uploads")
+      .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+    if (sErr) throw new Error(sErr.message);
+    return { url: signed.signedUrl };
+  });
+
