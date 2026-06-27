@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { fetchScholarships } from "@/lib/content";
 import { Calendar, GraduationCap, MapPin, Star } from "lucide-react";
+
 
 export const Route = createFileRoute("/scholarships")({
   head: () => ({ meta: [{ title: "Scholarships — Project Faraz" }, { name: "description", content: "Browse scholarships you can apply for." }] }),
