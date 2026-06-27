@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logoAsset from "@/assets/project-faraz-logo.png.asset.json";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -10,6 +11,31 @@ const NAV = [
   { to: "/blog", label: "Blog" },
 ];
 
+export function BrandMark({ size = 44, withWordmark = true }: { size?: number; withWordmark?: boolean }) {
+  return (
+    <span className="flex items-center gap-2.5">
+      <img
+        src={logoAsset.url}
+        alt="Project Faraz"
+        width={size}
+        height={size}
+        className="rounded-xl shadow-card"
+        style={{ width: size, height: size, objectFit: "cover" }}
+      />
+      {withWordmark && (
+        <span className="leading-tight">
+          <span className="block font-display text-base font-extrabold tracking-tight text-accent">
+            PROJECT FARAZ
+          </span>
+          <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            The Standard for Growth
+          </span>
+        </span>
+      )}
+    </span>
+  );
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -17,12 +43,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-2 font-display text-xl font-extrabold">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-hero text-white">
-            <Sparkles className="h-4 w-4" />
-          </span>
-          <span>Project <span className="text-accent">Faraz</span></span>
-        </Link>
+        <Link to="/"><BrandMark size={40} /></Link>
 
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((n) => {
@@ -118,8 +139,8 @@ export function SiteFooter() {
 
         <div className="mt-12 grid gap-8 md:grid-cols-4">
           <div>
-            <div className="font-display text-xl font-extrabold">Project Faraz</div>
-            <p className="mt-3 max-w-xs text-sm text-muted-foreground">
+            <BrandMark size={48} />
+            <p className="mt-4 max-w-xs text-sm text-muted-foreground">
               Connecting you with career opportunities, scholarships and trusted employers worldwide.
             </p>
           </div>

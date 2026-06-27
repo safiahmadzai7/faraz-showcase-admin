@@ -10,7 +10,8 @@ import {
   fetchJobs, fetchCompanies, fetchScholarships, fetchArticles, fetchTestimonials,
 } from "@/lib/content";
 import { Link } from "@tanstack/react-router";
-import { LogOut, Plus, Trash2, Pencil, ArrowLeft, Sparkles } from "lucide-react";
+import { LogOut, Plus, Trash2, Pencil, ArrowLeft } from "lucide-react";
+import { BrandMark } from "@/components/site-chrome";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -139,14 +140,9 @@ function Login({ onUnlocked }: { onUnlocked: () => void }) {
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground">
           <ArrowLeft className="h-4 w-4" /> Back to site
         </Link>
-        <div className="mt-4 flex items-center gap-2">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-hero text-white">
-            <Sparkles className="h-5 w-5" />
-          </span>
-          <div>
-            <h1 className="font-display text-xl font-extrabold">Project Faraz Admin</h1>
-            <p className="text-xs text-muted-foreground">Enter admin password to continue</p>
-          </div>
+        <div className="mt-4">
+          <BrandMark size={56} />
+          <p className="mt-3 text-xs text-muted-foreground">Enter admin password to continue</p>
         </div>
         <input
           type="password"
@@ -176,11 +172,9 @@ function Dashboard({ onLock }: { onLock: () => void }) {
     <div className="min-h-screen bg-gradient-soft">
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link to="/" className="flex items-center gap-2 font-display font-extrabold">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-hero text-white">
-              <Sparkles className="h-4 w-4" />
-            </span>
-            Project Faraz <span className="text-muted-foreground">/ Admin</span>
+          <Link to="/" className="flex items-center gap-3">
+            <BrandMark size={40} />
+            <span className="hidden text-sm text-muted-foreground sm:inline">/ Admin</span>
           </Link>
           <button
             onClick={async () => { await logout(); toast.success("Locked"); onLock(); }}
