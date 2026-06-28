@@ -31,10 +31,15 @@ function Page() {
                 className="group flex flex-col rounded-3xl border bg-gradient-card p-6 shadow-card transition hover:-translate-y-1 hover:shadow-pop"
               >
                 <div className="flex items-center gap-3">
-                  <div className="grid h-12 w-12 place-items-center rounded-xl bg-white text-accent shadow-card"><GraduationCap className="h-6 w-6" /></div>
+                  {s.logo_url ? (
+                    <img src={s.logo_url} alt={s.organization} className="h-12 w-12 rounded-xl object-cover shadow-card" />
+                  ) : (
+                    <div className="grid h-12 w-12 place-items-center rounded-xl bg-white text-accent shadow-card"><GraduationCap className="h-6 w-6" /></div>
+                  )}
                   <div className="font-semibold">{s.organization}</div>
                 </div>
                 <h3 className="mt-4 font-display text-lg font-bold group-hover:text-accent">{s.title}</h3>
+
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{s.description}</p>
                 <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                   <Row icon={MapPin} text={s.country || "Worldwide"} />
