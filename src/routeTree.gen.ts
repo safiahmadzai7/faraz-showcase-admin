@@ -9,31 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ScholarshipsRouteImport } from './routes/scholarships'
-import { Route as JobsRouteImport } from './routes/jobs'
-import { Route as CompaniesRouteImport } from './routes/companies'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ScholarshipsIndexRouteImport } from './routes/scholarships.index'
+import { Route as JobsIndexRouteImport } from './routes/jobs.index'
+import { Route as CompaniesIndexRouteImport } from './routes/companies.index'
 import { Route as ScholarshipsIdRouteImport } from './routes/scholarships.$id'
 import { Route as JobsIdRouteImport } from './routes/jobs.$id'
 import { Route as CompaniesIdRouteImport } from './routes/companies.$id'
 
-const ScholarshipsRoute = ScholarshipsRouteImport.update({
-  id: '/scholarships',
-  path: '/scholarships',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JobsRoute = JobsRouteImport.update({
-  id: '/jobs',
-  path: '/jobs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompaniesRoute = CompaniesRouteImport.update({
-  id: '/companies',
-  path: '/companies',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -49,55 +34,70 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScholarshipsIndexRoute = ScholarshipsIndexRouteImport.update({
+  id: '/scholarships/',
+  path: '/scholarships/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsIndexRoute = JobsIndexRouteImport.update({
+  id: '/jobs/',
+  path: '/jobs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompaniesIndexRoute = CompaniesIndexRouteImport.update({
+  id: '/companies/',
+  path: '/companies/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScholarshipsIdRoute = ScholarshipsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ScholarshipsRoute,
+  id: '/scholarships/$id',
+  path: '/scholarships/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const JobsIdRoute = JobsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => JobsRoute,
+  id: '/jobs/$id',
+  path: '/jobs/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CompaniesIdRoute = CompaniesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => CompaniesRoute,
+  id: '/companies/$id',
+  path: '/companies/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
-  '/companies': typeof CompaniesRouteWithChildren
-  '/jobs': typeof JobsRouteWithChildren
-  '/scholarships': typeof ScholarshipsRouteWithChildren
   '/companies/$id': typeof CompaniesIdRoute
   '/jobs/$id': typeof JobsIdRoute
   '/scholarships/$id': typeof ScholarshipsIdRoute
+  '/companies/': typeof CompaniesIndexRoute
+  '/jobs/': typeof JobsIndexRoute
+  '/scholarships/': typeof ScholarshipsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
-  '/companies': typeof CompaniesRouteWithChildren
-  '/jobs': typeof JobsRouteWithChildren
-  '/scholarships': typeof ScholarshipsRouteWithChildren
   '/companies/$id': typeof CompaniesIdRoute
   '/jobs/$id': typeof JobsIdRoute
   '/scholarships/$id': typeof ScholarshipsIdRoute
+  '/companies': typeof CompaniesIndexRoute
+  '/jobs': typeof JobsIndexRoute
+  '/scholarships': typeof ScholarshipsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
-  '/companies': typeof CompaniesRouteWithChildren
-  '/jobs': typeof JobsRouteWithChildren
-  '/scholarships': typeof ScholarshipsRouteWithChildren
   '/companies/$id': typeof CompaniesIdRoute
   '/jobs/$id': typeof JobsIdRoute
   '/scholarships/$id': typeof ScholarshipsIdRoute
+  '/companies/': typeof CompaniesIndexRoute
+  '/jobs/': typeof JobsIndexRoute
+  '/scholarships/': typeof ScholarshipsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,68 +105,50 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/blog'
-    | '/companies'
-    | '/jobs'
-    | '/scholarships'
     | '/companies/$id'
     | '/jobs/$id'
     | '/scholarships/$id'
+    | '/companies/'
+    | '/jobs/'
+    | '/scholarships/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/blog'
-    | '/companies'
-    | '/jobs'
-    | '/scholarships'
     | '/companies/$id'
     | '/jobs/$id'
     | '/scholarships/$id'
+    | '/companies'
+    | '/jobs'
+    | '/scholarships'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/blog'
-    | '/companies'
-    | '/jobs'
-    | '/scholarships'
     | '/companies/$id'
     | '/jobs/$id'
     | '/scholarships/$id'
+    | '/companies/'
+    | '/jobs/'
+    | '/scholarships/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   BlogRoute: typeof BlogRoute
-  CompaniesRoute: typeof CompaniesRouteWithChildren
-  JobsRoute: typeof JobsRouteWithChildren
-  ScholarshipsRoute: typeof ScholarshipsRouteWithChildren
+  CompaniesIdRoute: typeof CompaniesIdRoute
+  JobsIdRoute: typeof JobsIdRoute
+  ScholarshipsIdRoute: typeof ScholarshipsIdRoute
+  CompaniesIndexRoute: typeof CompaniesIndexRoute
+  JobsIndexRoute: typeof JobsIndexRoute
+  ScholarshipsIndexRoute: typeof ScholarshipsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/scholarships': {
-      id: '/scholarships'
-      path: '/scholarships'
-      fullPath: '/scholarships'
-      preLoaderRoute: typeof ScholarshipsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/jobs': {
-      id: '/jobs'
-      path: '/jobs'
-      fullPath: '/jobs'
-      preLoaderRoute: typeof JobsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/companies': {
-      id: '/companies'
-      path: '/companies'
-      fullPath: '/companies'
-      preLoaderRoute: typeof CompaniesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/blog': {
       id: '/blog'
       path: '/blog'
@@ -188,82 +170,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/scholarships/': {
+      id: '/scholarships/'
+      path: '/scholarships'
+      fullPath: '/scholarships/'
+      preLoaderRoute: typeof ScholarshipsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/': {
+      id: '/jobs/'
+      path: '/jobs'
+      fullPath: '/jobs/'
+      preLoaderRoute: typeof JobsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/companies/': {
+      id: '/companies/'
+      path: '/companies'
+      fullPath: '/companies/'
+      preLoaderRoute: typeof CompaniesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/scholarships/$id': {
       id: '/scholarships/$id'
-      path: '/$id'
+      path: '/scholarships/$id'
       fullPath: '/scholarships/$id'
       preLoaderRoute: typeof ScholarshipsIdRouteImport
-      parentRoute: typeof ScholarshipsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/jobs/$id': {
       id: '/jobs/$id'
-      path: '/$id'
+      path: '/jobs/$id'
       fullPath: '/jobs/$id'
       preLoaderRoute: typeof JobsIdRouteImport
-      parentRoute: typeof JobsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/companies/$id': {
       id: '/companies/$id'
-      path: '/$id'
+      path: '/companies/$id'
       fullPath: '/companies/$id'
       preLoaderRoute: typeof CompaniesIdRouteImport
-      parentRoute: typeof CompaniesRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface CompaniesRouteChildren {
-  CompaniesIdRoute: typeof CompaniesIdRoute
-}
-
-const CompaniesRouteChildren: CompaniesRouteChildren = {
-  CompaniesIdRoute: CompaniesIdRoute,
-}
-
-const CompaniesRouteWithChildren = CompaniesRoute._addFileChildren(
-  CompaniesRouteChildren,
-)
-
-interface JobsRouteChildren {
-  JobsIdRoute: typeof JobsIdRoute
-}
-
-const JobsRouteChildren: JobsRouteChildren = {
-  JobsIdRoute: JobsIdRoute,
-}
-
-const JobsRouteWithChildren = JobsRoute._addFileChildren(JobsRouteChildren)
-
-interface ScholarshipsRouteChildren {
-  ScholarshipsIdRoute: typeof ScholarshipsIdRoute
-}
-
-const ScholarshipsRouteChildren: ScholarshipsRouteChildren = {
-  ScholarshipsIdRoute: ScholarshipsIdRoute,
-}
-
-const ScholarshipsRouteWithChildren = ScholarshipsRoute._addFileChildren(
-  ScholarshipsRouteChildren,
-)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   BlogRoute: BlogRoute,
-  CompaniesRoute: CompaniesRouteWithChildren,
-  JobsRoute: JobsRouteWithChildren,
-  ScholarshipsRoute: ScholarshipsRouteWithChildren,
+  CompaniesIdRoute: CompaniesIdRoute,
+  JobsIdRoute: JobsIdRoute,
+  ScholarshipsIdRoute: ScholarshipsIdRoute,
+  CompaniesIndexRoute: CompaniesIndexRoute,
+  JobsIndexRoute: JobsIndexRoute,
+  ScholarshipsIndexRoute: ScholarshipsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

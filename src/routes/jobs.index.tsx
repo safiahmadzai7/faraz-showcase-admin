@@ -8,7 +8,7 @@ import { Briefcase, Clock, MapPin, Search, Star, X } from "lucide-react";
 
 type JobsSearch = { q?: string; loc?: string };
 
-export const Route = createFileRoute("/jobs")({
+export const Route = createFileRoute("/jobs/")({
   head: () => ({ meta: [{ title: "Find a Job — Project Faraz" }, { name: "description", content: "Browse all open jobs on Project Faraz." }] }),
   validateSearch: (s: Record<string, unknown>): JobsSearch => ({
     q: typeof s.q === "string" ? s.q : undefined,
