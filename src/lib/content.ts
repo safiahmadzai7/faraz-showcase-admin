@@ -14,8 +14,14 @@ export type Job = {
   salary: string | null;
   apply_url: string | null;
   featured: boolean;
+  description: string | null;
+  how_to_apply: string | null;
+  who_can_apply: string | null;
+  requirements: string | null;
+  benefits: string | null;
   created_at: string;
 };
+
 
 export type Company = {
   id: string;
