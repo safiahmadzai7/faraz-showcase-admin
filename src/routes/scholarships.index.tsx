@@ -5,7 +5,7 @@ import { fetchScholarships } from "@/lib/content";
 import { Calendar, GraduationCap, MapPin, Star } from "lucide-react";
 
 
-export const Route = createFileRoute("/scholarships")({
+export const Route = createFileRoute("/scholarships/")({
   head: () => ({ meta: [{ title: "Scholarships — Project Faraz" }, { name: "description", content: "Browse scholarships you can apply for." }] }),
   component: Page,
 });

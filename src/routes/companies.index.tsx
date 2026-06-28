@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { fetchCompanies } from "@/lib/content";
 
-export const Route = createFileRoute("/companies")({
+export const Route = createFileRoute("/companies/")({
   head: () => ({ meta: [{ title: "Top Companies — Project Faraz" }, { name: "description", content: "Best companies for employees." }] }),
   component: Page,
 });
