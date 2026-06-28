@@ -80,45 +80,60 @@ export type Database = {
       jobs: {
         Row: {
           apply_url: string | null
+          benefits: string | null
           category: string
           company: string
           created_at: string
+          description: string | null
           featured: boolean
+          how_to_apply: string | null
           id: string
           industry: string | null
           job_type: string
           location: string
           logo_url: string | null
+          requirements: string | null
           salary: string | null
           title: string
+          who_can_apply: string | null
         }
         Insert: {
           apply_url?: string | null
+          benefits?: string | null
           category?: string
           company: string
           created_at?: string
+          description?: string | null
           featured?: boolean
+          how_to_apply?: string | null
           id?: string
           industry?: string | null
           job_type?: string
           location?: string
           logo_url?: string | null
+          requirements?: string | null
           salary?: string | null
           title: string
+          who_can_apply?: string | null
         }
         Update: {
           apply_url?: string | null
+          benefits?: string | null
           category?: string
           company?: string
           created_at?: string
+          description?: string | null
           featured?: boolean
+          how_to_apply?: string | null
           id?: string
           industry?: string | null
           job_type?: string
           location?: string
           logo_url?: string | null
+          requirements?: string | null
           salary?: string | null
           title?: string
+          who_can_apply?: string | null
         }
         Relationships: []
       }
@@ -126,41 +141,56 @@ export type Database = {
         Row: {
           amount: string | null
           apply_url: string | null
+          benefits: string | null
           country: string
           created_at: string
           deadline: string | null
           description: string
+          how_to_apply: string | null
           id: string
           level: string
+          logo_url: string | null
           organization: string
+          requirements: string | null
           tags: string[]
           title: string
+          who_can_apply: string | null
         }
         Insert: {
           amount?: string | null
           apply_url?: string | null
+          benefits?: string | null
           country?: string
           created_at?: string
           deadline?: string | null
           description?: string
+          how_to_apply?: string | null
           id?: string
           level?: string
+          logo_url?: string | null
           organization: string
+          requirements?: string | null
           tags?: string[]
           title: string
+          who_can_apply?: string | null
         }
         Update: {
           amount?: string | null
           apply_url?: string | null
+          benefits?: string | null
           country?: string
           created_at?: string
           deadline?: string | null
           description?: string
+          how_to_apply?: string | null
           id?: string
           level?: string
+          logo_url?: string | null
           organization?: string
+          requirements?: string | null
           tags?: string[]
           title?: string
+          who_can_apply?: string | null
         }
         Relationships: []
       }
