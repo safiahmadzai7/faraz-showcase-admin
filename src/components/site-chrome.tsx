@@ -143,15 +143,19 @@ export function SiteFooter() {
             <p className="mt-4 max-w-xs text-sm text-muted-foreground">
               Connecting you with career opportunities, scholarships and trusted employers worldwide.
             </p>
+            <a href="tel:0789350280" className="mt-4 inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-foreground hover:bg-accent hover:text-accent-foreground">
+              📞 0789350280
+            </a>
           </div>
           <FooterCol title="Discover" items={["Find Jobs", "Browse Scholarships", "Top Companies", "Career Advice"]} />
           <FooterCol title="Employers" items={["Post Jobs", "Source Talent", "Advertising", "Hiring Events"]} />
-          <FooterCol title="Company" items={["About Us", "Media", "Work at Faraz", "Contact Us"]} />
+          <FooterCol title="Contact" items={["📞 0789350280", "About Us", "Work at Faraz", "Contact Us"]} />
         </div>
 
         <div className="mt-10 border-t pt-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Project Faraz. All rights reserved.
+          © {new Date().getFullYear()} Project Faraz. All rights reserved. · Call us: <a href="tel:0789350280" className="font-semibold text-foreground hover:text-accent">0789350280</a>
         </div>
+
       </div>
     </footer>
   );
