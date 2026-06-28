@@ -253,8 +253,6 @@ function ResourceManager({ table }: { table: TableKey }) {
     }
     const cleaned: Record<string, any> = {};
     Object.entries(row).forEach(([k, v]) => {
-      // Skip image_url-style key when table doesn't have it (scholarships)
-      if (table === "scholarships" && k === "logo_url") return;
       if (v === "" || v === null || (Array.isArray(v) && v.length === 0)) return;
       cleaned[k] = v;
     });
@@ -276,11 +274,8 @@ function ResourceManager({ table }: { table: TableKey }) {
     } catch (e: any) { toast.error(e.message ?? "Delete failed"); }
   }
 
-  // Filter fields - hide logo_url for scholarships since table doesn't have that column
-  const visibleFields = useMemo(() => {
-    if (table === "scholarships") return schema.fields.filter((f) => f.key !== "logo_url");
-    return schema.fields;
-  }, [table, schema]);
+  const visibleFields = schema.fields;
+
 
   return (
     <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_440px]">
