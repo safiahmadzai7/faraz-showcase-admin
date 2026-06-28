@@ -39,7 +39,12 @@ const SCHEMAS: Record<TableKey, { label: string; fetch: () => Promise<any[]>; fi
       { key: "category", label: "Category", required: true, placeholder: "UI/UX, Sales, Engineering" },
       { key: "industry", label: "Industry", placeholder: "Technology" },
       { key: "salary", label: "Salary", placeholder: "$400/monthly" },
-      { key: "apply_url", label: "Apply URL", type: "url", required: true, placeholder: "https://…" },
+      { key: "apply_url", label: "Apply URL (optional)", type: "url", placeholder: "https://…" },
+      { key: "description", label: "Job Description (optional)", type: "textarea", placeholder: "What is the role about?" },
+      { key: "who_can_apply", label: "Who can apply (optional)", type: "textarea", placeholder: "Eligibility / who this role is for" },
+      { key: "requirements", label: "Requirements (optional)", type: "textarea", placeholder: "Skills, experience, qualifications" },
+      { key: "benefits", label: "Benefits / Perks (optional)", type: "textarea" },
+      { key: "how_to_apply", label: "How to apply (optional)", type: "textarea", placeholder: "Steps to apply, documents needed, email…" },
       { key: "featured", label: "Featured on homepage", type: "checkbox" },
     ],
   },
@@ -60,19 +65,25 @@ const SCHEMAS: Record<TableKey, { label: string; fetch: () => Promise<any[]>; fi
     fetch: fetchScholarships,
     primary: "title",
     secondary: "organization",
+    thumb: "logo_url",
     fields: [
       { key: "title", label: "Scholarship Title", required: true },
       { key: "organization", label: "Organization", required: true, placeholder: "Chevening / UK Government" },
-      { key: "logo_url" as any, label: "Photo / Cover", type: "image" },
+      { key: "logo_url", label: "Photo / Cover", type: "image" },
       { key: "country", label: "Country", required: true, placeholder: "United Kingdom" },
       { key: "amount", label: "Amount / Value", placeholder: "Fully funded" },
       { key: "level", label: "Level", required: true, placeholder: "Undergraduate, Masters, PhD" },
       { key: "deadline", label: "Deadline", type: "date" },
       { key: "description", label: "Description", type: "textarea", required: true },
       { key: "tags", label: "Tags (comma separated)", type: "tags" },
-      { key: "apply_url", label: "Apply URL", type: "url", required: true },
+      { key: "apply_url", label: "Apply URL (shown as Apply now button)", type: "url", placeholder: "https://…" },
+      { key: "who_can_apply", label: "Who can apply (optional)", type: "textarea", placeholder: "Eligibility criteria" },
+      { key: "requirements", label: "Requirements (optional)", type: "textarea", placeholder: "Documents, grades, language tests…" },
+      { key: "benefits", label: "Benefits (optional)", type: "textarea", placeholder: "What does it cover?" },
+      { key: "how_to_apply", label: "How to apply (optional)", type: "textarea", placeholder: "Step-by-step instructions" },
     ],
   },
+
   articles: {
     label: "Blog Articles",
     fetch: fetchArticles,
@@ -242,8 +253,6 @@ function ResourceManager({ table }: { table: TableKey }) {
     }
     const cleaned: Record<string, any> = {};
     Object.entries(row).forEach(([k, v]) => {
-      // Skip image_url-style key when table doesn't have it (scholarships)
-      if (table === "scholarships" && k === "logo_url") return;
       if (v === "" || v === null || (Array.isArray(v) && v.length === 0)) return;
       cleaned[k] = v;
     });
@@ -265,11 +274,8 @@ function ResourceManager({ table }: { table: TableKey }) {
     } catch (e: any) { toast.error(e.message ?? "Delete failed"); }
   }
 
-  // Filter fields - hide logo_url for scholarships since table doesn't have that column
-  const visibleFields = useMemo(() => {
-    if (table === "scholarships") return schema.fields.filter((f) => f.key !== "logo_url");
-    return schema.fields;
-  }, [table, schema]);
+  const visibleFields = schema.fields;
+
 
   return (
     <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_440px]">

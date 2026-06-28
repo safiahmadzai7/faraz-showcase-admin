@@ -121,9 +121,10 @@ function JobsPage() {
                   <Row icon={Briefcase} text={j.category} />
                   {j.salary && <Row icon={Star} text={j.salary} />}
                 </div>
-                <span className="mt-5 inline-flex items-center justify-center rounded-full bg-primary py-2.5 text-center text-sm font-semibold text-primary-foreground">
-                  View details
+                <span className="mt-5 inline-flex items-center justify-center gap-1 rounded-full border border-dashed border-accent/50 bg-accent/5 py-2.5 text-center text-sm font-semibold text-accent">
+                  Tap to see how to apply →
                 </span>
+
               </Link>
             ))}
 

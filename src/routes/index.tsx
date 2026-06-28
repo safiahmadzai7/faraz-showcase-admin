@@ -248,9 +248,10 @@ function JobCard({ j }: { j: Job }) {
           <Meta icon={Briefcase} label={j.industry || j.category} />
           {j.salary && <Meta icon={Star} label={j.salary} />}
         </div>
-        <span className="mt-5 block rounded-full bg-primary py-2.5 text-center text-sm font-semibold text-primary-foreground">
-          View details
+        <span className="mt-5 block rounded-full border border-dashed border-accent/50 bg-accent/5 py-2.5 text-center text-sm font-semibold text-accent">
+          Tap to see how to apply →
         </span>
+
       </motion.div>
     </Link>
   );
