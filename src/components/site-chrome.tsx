@@ -1,14 +1,15 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Languages } from "lucide-react";
 import logoAsset from "@/assets/project-faraz-logo.png.asset.json";
+import { useI18n } from "@/lib/i18n";
 
 const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/jobs", label: "Find a Job" },
-  { to: "/scholarships", label: "Scholarships" },
-  { to: "/companies", label: "Companies" },
-  { to: "/blog", label: "Blog" },
+  { to: "/", key: "nav.home" as const },
+  { to: "/jobs", key: "nav.jobs" as const },
+  { to: "/scholarships", key: "nav.scholarships" as const },
+  { to: "/companies", key: "nav.companies" as const },
+  { to: "/blog", key: "nav.blog" as const },
 ];
 
 export function BrandMark({ size = 44, withWordmark = true }: { size?: number; withWordmark?: boolean }) {
@@ -36,9 +37,24 @@ export function BrandMark({ size = 44, withWordmark = true }: { size?: number; w
   );
 }
 
+function LangToggle({ className = "" }: { className?: string }) {
+  const { lang, setLang, t } = useI18n();
+  return (
+    <button
+      onClick={() => setLang(lang === "en" ? "dr" : "en")}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-sm font-semibold text-foreground hover:bg-secondary ${className}`}
+      aria-label="Toggle language"
+    >
+      <Languages className="h-4 w-4" />
+      {t("lang.toggle")}
+    </button>
+  );
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { t } = useI18n();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
@@ -56,19 +72,14 @@ export function SiteHeader() {
                   active ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {n.label}
+                {t(n.key)}
               </Link>
             );
           })}
         </nav>
 
         <div className="hidden md:block">
-          <Link
-            to="/admin"
-            className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
-          >
-            Admin
-          </Link>
+          <LangToggle />
         </div>
 
         <button
@@ -90,16 +101,12 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 className="rounded-xl px-3 py-2 text-sm font-medium hover:bg-secondary"
               >
-                {n.label}
+                {t(n.key)}
               </Link>
             ))}
-            <Link
-              to="/admin"
-              onClick={() => setOpen(false)}
-              className="mt-2 rounded-xl bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-foreground"
-            >
-              Admin
-            </Link>
+            <div className="mt-2">
+              <LangToggle className="w-full justify-center" />
+            </div>
           </div>
         </div>
       )}
@@ -141,7 +148,7 @@ export function SiteFooter() {
           <div>
             <BrandMark size={48} />
             <p className="mt-4 max-w-xs text-sm text-muted-foreground">
-              Connecting you with career opportunities, scholarships and trusted employers worldwide.
+              Connecting Afghan talents with jobs, scholarships and trusted employers worldwide.
             </p>
             <a href="tel:0789350280" className="mt-4 inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-foreground hover:bg-accent hover:text-accent-foreground">
               📞 0789350280
