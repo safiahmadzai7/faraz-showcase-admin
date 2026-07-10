@@ -20,6 +20,7 @@ import "@fontsource/manrope/600.css";
 import "@fontsource/manrope/700.css";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "sonner";
+import { LanguageProvider } from "../lib/i18n";
 
 function NotFoundComponent() {
   return (
