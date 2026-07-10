@@ -205,6 +205,9 @@ function MissionSection() {
       <div className="mx-auto max-w-4xl text-center">
         <div className="text-sm font-semibold uppercase tracking-wider text-accent">{t("mission.tag")}</div>
         <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl md:text-5xl">{t("mission.title")}</h2>
+        <p className="mx-auto mt-4 max-w-2xl font-display text-xl font-semibold italic text-accent sm:text-2xl">
+          Your Future, Our Mission.
+        </p>
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-foreground/70">{t("mission.body")}</p>
       </div>
     </section>
