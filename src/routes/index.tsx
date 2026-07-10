@@ -80,17 +80,7 @@ function Hero() {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <span className="inline-block rounded-full bg-white/60 px-4 py-1 text-xs font-semibold text-accent">
-              Realize your Career Dreams
-            </span>
-            <h1 className="mt-4 font-display text-4xl font-extrabold leading-tight text-foreground sm:text-5xl md:text-6xl">
-              Modernizing the Job <br className="hidden sm:block" />
-              Search Experience
-            </h1>
-            <p className="mx-auto mt-4 max-w-xl text-base text-foreground/70">
-              Search and find your dream job, scholarship or top company — all in one place, curated for you.
-            </p>
-
+            <HeroCopy />
             <HeroSearch />
 
           </motion.div>
