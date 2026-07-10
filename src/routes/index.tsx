@@ -51,22 +51,22 @@ function Hero() {
     <section className="relative overflow-hidden px-4 sm:px-6 lg:px-8">
       <div className="mx-auto mt-6 max-w-7xl rounded-[2rem] bg-gradient-hero p-6 shadow-pop sm:p-12 lg:p-20">
         <div className="relative">
-          {/* Floating cards */}
-          <FloatCard className="left-2 top-4 hidden lg:flex" delay={0.1}>
+          {/* Floating cards — only on very wide screens, positioned outside the hero copy */}
+          <FloatCard className="-left-4 -top-4 hidden 2xl:flex" delay={0.1}>
             <div className="h-9 w-9 rounded-full bg-gradient-hero" />
             <div>
               <div className="text-[10px] text-muted-foreground">Product Designer</div>
               <div className="text-xs font-bold">Spotify · $152K</div>
             </div>
           </FloatCard>
-          <FloatCard className="right-2 top-2 hidden lg:flex" delay={0.2}>
+          <FloatCard className="-right-4 -top-8 hidden 2xl:flex" delay={0.2}>
             <TrendingUp className="h-5 w-5 text-accent" />
             <div>
               <div className="text-[10px] text-muted-foreground">Top Categories</div>
               <div className="text-xs font-bold">UI · Design · Sales</div>
             </div>
           </FloatCard>
-          <FloatCard className="bottom-6 left-4 hidden lg:flex" delay={0.3}>
+          <FloatCard className="-bottom-10 -left-6 hidden 2xl:flex" delay={0.3}>
             <Briefcase className="h-5 w-5 text-accent" />
             <div>
               <div className="text-[10px] text-muted-foreground">Design Engineer</div>
@@ -78,7 +78,7 @@ function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mx-auto max-w-3xl text-center"
+            className="relative z-20 mx-auto max-w-3xl text-center"
           >
             <HeroCopy />
             <HeroSearch />
