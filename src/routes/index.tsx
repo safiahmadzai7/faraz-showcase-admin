@@ -5,8 +5,10 @@ import { useState } from "react";
 import {
   Search, MapPin, Briefcase, Bookmark, GraduationCap,
   Calendar, ArrowRight, Star, Clock, TrendingUp,
+  MousePointerClick, FileSearch, Send, Phone, Mail, HeartHandshake,
 } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import { useI18n } from "@/lib/i18n";
 import {
   fetchJobs, fetchCompanies, fetchScholarships,
   fetchArticles, fetchTestimonials,
