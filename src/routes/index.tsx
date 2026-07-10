@@ -32,9 +32,12 @@ function HomePage() {
     <div className="min-h-screen">
       <SiteHeader />
       <Hero />
+      <HowItWorks />
+      <MissionSection />
       <CompaniesSection />
       <JobsSection />
       <ScholarshipsSection />
+      <HelpCard />
       <TestimonialsSection />
       <BlogSection />
       <SiteFooter />
