@@ -103,8 +103,27 @@ function FloatCard({ children, className = "", delay = 0 }: { children: React.Re
   );
 }
 
+function HeroCopy() {
+  const { t } = useI18n();
+  return (
+    <>
+      <span className="inline-block rounded-full bg-white/60 px-4 py-1 text-xs font-semibold text-accent">
+        {t("hero.tag")}
+      </span>
+      <h1 className="mt-4 font-display text-4xl font-extrabold leading-tight text-foreground sm:text-5xl md:text-6xl">
+        {t("hero.title.1")} <br className="hidden sm:block" />
+        {t("hero.title.2")}
+      </h1>
+      <p className="mx-auto mt-4 max-w-xl text-base text-foreground/70">
+        {t("hero.subtitle")}
+      </p>
+    </>
+  );
+}
+
 function HeroSearch() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [q, setQ] = useState("");
   const [loc, setLoc] = useState("");
   return (
@@ -121,7 +140,7 @@ function HeroSearch() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           className="w-full bg-transparent text-sm outline-none"
-          placeholder="Job title, keyword or company"
+          placeholder={t("hero.search.q")}
         />
       </label>
       <label className="flex items-center gap-2 rounded-full border-t px-4 py-2.5 sm:border-l sm:border-t-0">
@@ -130,15 +149,112 @@ function HeroSearch() {
           value={loc}
           onChange={(e) => setLoc(e.target.value)}
           className="w-full bg-transparent text-sm outline-none"
-          placeholder="City, state or remote"
+          placeholder={t("hero.search.loc")}
         />
       </label>
       <button className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground">
-        Search
+        {t("hero.search.btn")}
       </button>
     </form>
   );
 }
+
+/* ---------------- How It Works ---------------- */
+function HowItWorks() {
+  const { t } = useI18n();
+  const steps = [
+    { icon: MousePointerClick, title: t("how.s1.title"), body: t("how.s1.body") },
+    { icon: FileSearch, title: t("how.s2.title"), body: t("how.s2.body") },
+    { icon: Send, title: t("how.s3.title"), body: t("how.s3.body") },
+  ];
+  return (
+    <section className="px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mx-auto mb-10 max-w-2xl text-center">
+          <div className="text-sm font-semibold uppercase tracking-wider text-accent">{t("how.tag")}</div>
+          <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl md:text-5xl">{t("how.title")}</h2>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {steps.map((s, i) => (
+            <motion.div
+              key={s.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative rounded-3xl border bg-card p-6 shadow-card"
+            >
+              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-hero text-white shadow-pop">
+                <s.icon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-5 font-display text-xl font-bold">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Mission ---------------- */
+function MissionSection() {
+  const { t } = useI18n();
+  return (
+    <section className="bg-gradient-soft px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl text-center">
+        <div className="text-sm font-semibold uppercase tracking-wider text-accent">{t("mission.tag")}</div>
+        <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl md:text-5xl">{t("mission.title")}</h2>
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-foreground/70">{t("mission.body")}</p>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Help / Contact card ---------------- */
+function HelpCard() {
+  const { t } = useI18n();
+  return (
+    <section className="px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative overflow-hidden rounded-[2rem] bg-gradient-hero p-8 shadow-pop md:p-14"
+        >
+          <div className="grid gap-8 md:grid-cols-[auto_1fr_auto] md:items-center">
+            <div className="grid h-16 w-16 place-items-center rounded-3xl bg-white/80 text-accent shadow-card">
+              <HeartHandshake className="h-8 w-8" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-wider text-accent">{t("help.tag")}</div>
+              <h3 className="mt-2 font-display text-2xl font-extrabold text-foreground md:text-3xl">
+                {t("help.title")}
+              </h3>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-foreground/70">{t("help.body")}</p>
+            </div>
+            <div className="flex flex-col gap-2 md:min-w-[200px]">
+              <a
+                href="tel:0789350280"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-card hover:opacity-90"
+              >
+                <Phone className="h-4 w-4" /> {t("help.call")} · 0789350280
+              </a>
+              <a
+                href="mailto:info@projectfaraz.com"
+                className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/60 bg-white/40 px-5 py-3 text-sm font-semibold text-foreground hover:bg-white"
+              >
+                <Mail className="h-4 w-4" /> {t("help.email")}
+              </a>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 
 /* ---------------- Section helpers ---------------- */
 function SectionHeader({ tag, title }: { tag: string; title: string }) {
